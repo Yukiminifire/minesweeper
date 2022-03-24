@@ -1,7 +1,7 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
 import { generateBoard } from './logic'
-import MineBlock from './component/MineBlock.vue'
+import MyMineBlock from './component/MyMineBlock.vue'
 import Footer from './component/Footer.vue'
 import { onRightClick } from './logic'
 import { onClick } from './logic'
@@ -15,7 +15,7 @@ export default defineComponent({
       onClick,
     }
   },
-  components: { MineBlock, Footer },
+  components: { MyMineBlock, Footer },
 })
 </script>
 
@@ -27,7 +27,7 @@ export default defineComponent({
 
     <div class="flex py-3">
       <div v-for="(row, y) in board" :key="y">
-        <MineBlock
+        <MyMineBlock
           v-for="(block, x) in row"
           :key="x"
           :block="block"
