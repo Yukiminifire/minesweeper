@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { generateBoard } from './logic'
+import { gennerateGameState } from './logic'
 import MyMineBlock from './component/MyMineBlock.vue'
 import Footer from './component/Footer.vue'
 import { onRightClick } from './logic'
@@ -8,9 +8,10 @@ import { onClick } from './logic'
 
 export default defineComponent({
   setup() {
-    const board = ref(generateBoard(10, 10))
+    const gameState = ref(gennerateGameState(10, 10))
+
     return {
-      board,
+      gameState,
       onRightClick,
       onClick,
     }
@@ -26,13 +27,13 @@ export default defineComponent({
     <h1>Minesweeper</h1>
 
     <div class="flex py-3">
-      <div v-for="(row, y) in board" :key="y">
+      <div v-for="(row, y) in gameState.board" :key="y">
         <MyMineBlock
           v-for="(block, x) in row"
           :key="x"
           :block="block"
-          @contextmenu.prevent="onRightClick(board, block)"
-          @click="onClick(board, block)"
+          @contextmenu.prevent="onRightClick(gameState, block)"
+          @click="onClick(gameState, block)"
         />
       </div>
     </div>

@@ -21,6 +21,30 @@ export function generateBoard(width: number, height: number) {
   return myBoard
 }
 
+export interface GameState {
+  board: BlockState[][]
+  mineGenerated: boolean
+  status: GameStatus
+  time: {
+    start: number
+    end: number
+  }
+}
+
+export function gennerateGameState(width: number, height: number) {
+  const gameState: GameState = {
+    board: generateBoard(width, height),
+    mineGenerated: false,
+    status: 'play',
+    time: {
+      start: NaN,
+      end: NaN,
+    },
+  }
+
+  return gameState
+}
+
 const directions = [
   [1, 1],
   [1, 0],
@@ -32,12 +56,6 @@ const directions = [
   [0, 1],
 ]
 type GameStatus = 'play' | 'won' | 'lost'
-
-export interface GameState {
-  board: BlockState[][]
-  mineGenerated: boolean
-  status: GameStatus
-}
 
 function generateMine(board: BlockState[][], initBlock: BlockState) {
   const x = Math.floor(Math.random() * board[0].length)
@@ -127,7 +145,9 @@ export function showAllmines(board: BlockState[][], block: BlockState) {
   }
 }
 
-export function onRightClick(board: BlockState[][], block: BlockState) {
+export function onRightClick(gameState: GameState, block: BlockState) {
+  const { board } = gameState
+
   if (!block.flagged) {
     board.forEach((row) => {
       row.forEach((i) => {
@@ -141,7 +161,8 @@ export function onRightClick(board: BlockState[][], block: BlockState) {
   }
 }
 
-export function onClick(board: BlockState[][], block: BlockState) {
+export function onClick(gameState: GameState, block: BlockState) {
+  const { board } = gameState
   if (block.flagged) {
     return
   }
@@ -151,6 +172,7 @@ export function onClick(board: BlockState[][], block: BlockState) {
   return board.forEach((row) => {
     row.forEach((i) => {
       if (i.adjacentMines) {
+        console.log('revealed')
         return (i.revealed = true)
       }
     })
