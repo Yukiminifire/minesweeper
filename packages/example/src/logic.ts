@@ -182,18 +182,21 @@ function initGameState(gameState: GameState, block: BlockState) {
 
   generateMines(board, mineCount, block)
   gameState.mineGenerated = true
-  block.revealed = true
+}
 
-  expendZero(board, block)
+function revealeBlock(board: BlockState[][], centerBlock: BlockState) {
+  centerBlock.revealed = true
+  if (!centerBlock.mines) {
+    expendZero(board, centerBlock)
+  }
 }
 
 export function onClick(gameState: GameState, block: BlockState) {
-  const { mineGenerated } = gameState
+  const { mineGenerated, board } = gameState
 
   if (!mineGenerated) {
     initGameState(gameState, block)
-    return
   }
 
-  block.revealed = true
+  revealeBlock(board, block)
 }
