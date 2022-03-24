@@ -173,6 +173,7 @@ function initGameState(gameState: GameState, block: BlockState) {
 
   generateMines(board, mineCount, block)
   gameState.mineGenerated = true
+  gameState.time.start = Date.now()
 }
 
 function revealeBlock(board: BlockState[][], centerBlock: BlockState) {
