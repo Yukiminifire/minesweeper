@@ -24,7 +24,6 @@ export function generateBoard(width: number, height: number) {
 export interface GameState {
   board: BlockState[][]
   mineGenerated: boolean
-  status: GameStatus
   mineCount: number
   time: {
     start: number
@@ -41,7 +40,6 @@ export function gennerateGameState(
     board: generateBoard(width, height),
     mineGenerated: false,
     mineCount,
-    status: 'play',
     time: {
       start: NaN,
       end: NaN,
@@ -243,4 +241,42 @@ function autoExpend(board: BlockState[][], centerBlock: BlockState) {
         })
     }
   }
+}
+
+export function checkGameStatus(gameState: GameState): GameStatus {
+  const { board, mineCount } = gameState
+  const isLost = board.some((row) => {
+    return row.some((i) => {
+      return i.isMine && i.revealed
+    })
+  })
+
+  if (isLost) {
+    return 'lost'
+  }
+
+  const flags = board.reduce((rSum, row) => {
+    return (
+      rSum +
+      row.reduce((sum, i) => {
+        return sum + (i.flagged ? 1 : 0)
+      }, 0)
+    )
+  }, 0)
+
+  const unRevealed = board.reduce((rSum, row) => {
+    return (
+      rSum +
+      row.reduce((sum, i) => {
+        return sum + (!i.revealed && !i.flagged ? 1 : 0)
+      }, 0)
+    )
+  }, 0)
+
+  const isWin = flags + unRevealed === mineCount
+  if (isWin) {
+    return 'won'
+  }
+
+  return 'play'
 }
