@@ -114,14 +114,20 @@ export function expendZero(board: BlockState[][], centerBlock: BlockState) {
   if (centerBlock.mines) {
     throw new Error('exendZero 不能展开雷')
   }
-  if (centerBlock.adjacentMines > 0) {
-    return
-  } else {
-    getArounds(board, centerBlock).forEach((i) => {
+
+  if (!centerBlock.revealed) {
+    throw new Error('exendZero 不能展开未翻开的格子')
+  }
+
+  console.log('expendZero')
+  if (centerBlock.adjacentMines === 0) {
+    const arounds = getArounds(board, centerBlock)
+
+    arounds.forEach((i) => {
       if (!i.revealed) {
-        return (i.revealed = true)
+        i.revealed = true
+        expendZero(board, i)
       }
-      expendZero(board, i)
     })
   }
 }
