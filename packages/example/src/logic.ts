@@ -119,7 +119,6 @@ export function expendZero(board: BlockState[][], centerBlock: BlockState) {
     throw new Error('exendZero 不能展开未翻开的格子')
   }
 
-  console.log('expendZero')
   if (centerBlock.adjacentMines === 0) {
     const arounds = getArounds(board, centerBlock)
 
@@ -159,8 +158,6 @@ export function showAllmines(board: BlockState[][], block: BlockState) {
 }
 
 export function onRightClick(gameState: GameState, block: BlockState) {
-  const { board } = gameState
-
   if (!block.revealed) {
     if (block.flagged) {
       block.flagged = false
@@ -196,5 +193,54 @@ export function onClick(gameState: GameState, block: BlockState) {
     initGameState(gameState, block)
   }
 
-  revealeBlock(board, block)
+  if (!block.flagged) {
+    revealeBlock(board, block)
+  }
+}
+
+export function onDbClick(gameState: GameState, block: BlockState) {
+  const { board } = gameState
+
+  console.log('onDbClick')
+
+  if (!block.flagged) {
+    autoExpend(board, block)
+  }
+}
+
+function autoExpend(board: BlockState[][], centerBlock: BlockState) {
+  if (centerBlock.adjacentMines > 0) {
+    const arounds = getArounds(board, centerBlock)
+
+    const flags = arounds.reduce((sum, i) => {
+      return sum + (i.flagged ? 1 : 0)
+    }, 0)
+
+    const revealed = arounds.reduce((sum, i) => {
+      return sum + (i.revealed ? 1 : 0)
+    }, 0)
+
+    const unRevealed = 8 - revealed - flags
+
+    if (centerBlock.adjacentMines - flags === unRevealed) {
+      arounds
+        .filter((i) => {
+          return !i.revealed && !i.flagged
+        })
+        .forEach((i) => {
+          i.flagged = true
+        })
+    }
+
+    if (centerBlock.adjacentMines - flags === 0 && unRevealed > 0) {
+      arounds
+        .filter((i) => {
+          return !i.revealed && !i.flagged
+        })
+        .forEach((i) => {
+          i.revealed = true
+          expendZero(board, i)
+        })
+    }
+  }
 }
