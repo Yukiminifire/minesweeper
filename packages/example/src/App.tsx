@@ -1,10 +1,13 @@
 import { defineFunctionComponent } from './func/defineFunctionComponent'
-import { getGreeting } from '@template/template'
-
+import MineSweeper from './MineSweeper.vue'
 export const App = defineFunctionComponent(() => {
   return {
     render() {
-      return <div>{getGreeting()}</div>
+      return (
+        <div>
+          <MineSweeper />
+        </div>
+      )
     },
   }
 })
