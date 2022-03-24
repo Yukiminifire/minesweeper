@@ -161,16 +161,12 @@ export function showAllmines(board: BlockState[][], block: BlockState) {
 export function onRightClick(gameState: GameState, block: BlockState) {
   const { board } = gameState
 
-  if (!block.flagged) {
-    board.forEach((row) => {
-      row.forEach((i) => {
-        if (!i.flagged) {
-          i.flagged = true
-        } else {
-          block.flagged = !block.flagged
-        }
-      })
-    })
+  if (!block.revealed) {
+    if (block.flagged) {
+      block.flagged = false
+    } else {
+      block.flagged = true
+    }
   }
 }
 
@@ -193,6 +189,8 @@ function revealeBlock(board: BlockState[][], centerBlock: BlockState) {
 
 export function onClick(gameState: GameState, block: BlockState) {
   const { mineGenerated, board } = gameState
+
+  console.log('onClick')
 
   if (!mineGenerated) {
     initGameState(gameState, block)

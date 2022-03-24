@@ -18,7 +18,7 @@ const numberColors = [
 ]
 
 function getblockClass(block: BlockState) {
-  if (block.flagged) return
+  // if (block.flagged) return 'bg-gray-500/40 hover:bg-gray-400'
   if (!block.revealed) {
     return 'bg-gray-500/40 hover:bg-gray-400'
   }
@@ -38,7 +38,7 @@ function getblockClass(block: BlockState) {
     items-center ${getblockClass(block)}`"
   >
     <template v-if="block.flagged">
-      <div class="text-red-500">
+      <div class="text-red-500 bg-gray-">
         <Flag />
       </div>
     </template>
