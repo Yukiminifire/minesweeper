@@ -25,16 +25,22 @@ export interface GameState {
   board: BlockState[][]
   mineGenerated: boolean
   status: GameStatus
+  mineCount: number
   time: {
     start: number
     end: number
   }
 }
 
-export function gennerateGameState(width: number, height: number) {
+export function gennerateGameState(
+  width: number,
+  height: number,
+  mineCount: number,
+) {
   const gameState: GameState = {
     board: generateBoard(width, height),
     mineGenerated: false,
+    mineCount,
     status: 'play',
     time: {
       start: NaN,
@@ -80,6 +86,7 @@ export function generateMines(
       success = generateMine(board, initBlock)
     }
   }
+  undateNumbers(board)
 }
 
 function getArounds(board: BlockState[][], centerBlock: BlockState) {
@@ -161,20 +168,26 @@ export function onRightClick(gameState: GameState, block: BlockState) {
   }
 }
 
+function initGameState(gameState: GameState, block: BlockState) {
+  const { board, mineCount, mineGenerated } = gameState
+  if (mineGenerated) {
+    throw new Error('game state already inited')
+  }
+
+  generateMines(board, mineCount, block)
+  gameState.mineGenerated = true
+  block.revealed = true
+
+  expendZero(board, block)
+}
+
 export function onClick(gameState: GameState, block: BlockState) {
-  const { board } = gameState
-  if (block.flagged) {
+  const { mineGenerated } = gameState
+
+  if (!mineGenerated) {
+    initGameState(gameState, block)
     return
   }
-  if (block.mines) {
-    return showAllmines(board, block)
-  }
-  return board.forEach((row) => {
-    row.forEach((i) => {
-      if (i.adjacentMines) {
-        console.log('revealed')
-        return (i.revealed = true)
-      }
-    })
-  })
+
+  block.revealed = true
 }

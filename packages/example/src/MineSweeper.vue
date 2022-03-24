@@ -8,7 +8,7 @@ import { onClick } from './logic'
 
 export default defineComponent({
   setup() {
-    const gameState = ref(gennerateGameState(10, 10))
+    const gameState = ref(gennerateGameState(10, 10, 10))
 
     return {
       gameState,
