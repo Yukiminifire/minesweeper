@@ -2,7 +2,7 @@ export interface BlockState {
   x: number
   y: number
   revealed: boolean
-  mines: boolean
+  isMine: boolean
   flagged: boolean
   adjacentMines: number
 }

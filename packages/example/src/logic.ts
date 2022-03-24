@@ -10,7 +10,7 @@ export function generateBoard(width: number, height: number) {
         x,
         y,
         revealed: false,
-        mines: false,
+        isMine: false,
         flagged: false,
         adjacentMines: 0,
       }
@@ -67,10 +67,10 @@ function generateMine(board: BlockState[][], initBlock: BlockState) {
   const x = Math.floor(Math.random() * board[0].length)
   const y = Math.floor(Math.random() * board.length)
   const block = board[y][x]
-  if (block.mines || (x === initBlock.x && y === initBlock.y)) {
+  if (block.isMine || (x === initBlock.x && y === initBlock.y)) {
     return false
   } else {
-    block.mines = true
+    block.isMine = true
     return true
   }
 }
@@ -111,7 +111,7 @@ function getArounds(board: BlockState[][], centerBlock: BlockState) {
 }
 
 export function expendZero(board: BlockState[][], centerBlock: BlockState) {
-  if (centerBlock.mines) {
+  if (centerBlock.isMine) {
     throw new Error('exendZero 不能展开雷')
   }
 
@@ -135,9 +135,9 @@ export function expendZero(board: BlockState[][], centerBlock: BlockState) {
 export function undateNumbers(board: BlockState[][]) {
   board.forEach((row) => {
     row.forEach((block) => {
-      if (!block.mines) {
+      if (!block.isMine) {
         getArounds(board, block).forEach((i) => {
-          if (i.mines) {
+          if (i.isMine) {
             block.adjacentMines += 1
           }
         })
@@ -147,10 +147,10 @@ export function undateNumbers(board: BlockState[][]) {
 }
 
 export function showAllmines(board: BlockState[][], block: BlockState) {
-  if (block.mines) {
+  if (block.isMine) {
     board.forEach((row) => {
       row.forEach((i) => {
-        if (i.mines) {
+        if (i.isMine) {
           i.revealed = true
         }
       })
@@ -186,7 +186,7 @@ function initGameState(gameState: GameState, block: BlockState) {
 
 function revealeBlock(board: BlockState[][], centerBlock: BlockState) {
   centerBlock.revealed = true
-  if (!centerBlock.mines) {
+  if (!centerBlock.isMine) {
     expendZero(board, centerBlock)
   }
 }

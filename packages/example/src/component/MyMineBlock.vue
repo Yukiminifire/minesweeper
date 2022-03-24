@@ -22,7 +22,7 @@ function getblockClass(block: BlockState) {
   if (!block.revealed) {
     return 'bg-gray-500/40 hover:bg-gray-400'
   }
-  return block.mines ? 'bg-red-500' : numberColors[block.adjacentMines]
+  return block.isMine ? 'bg-red-500' : numberColors[block.adjacentMines]
 }
 </script>
 
@@ -43,7 +43,7 @@ function getblockClass(block: BlockState) {
       </div>
     </template>
     <template v-else-if="block.revealed || isDev">
-      <div v-if="block.mines">
+      <div v-if="block.isMine">
         <Mmines />
       </div>
       <div v-else class="font-bold">
