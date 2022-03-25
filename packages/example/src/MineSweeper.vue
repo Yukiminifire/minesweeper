@@ -10,6 +10,7 @@ import {
   checkGameStatus,
   useNow,
   getArounds,
+  fireWork,
 } from './logic'
 import Timer from './component/Timer.vue'
 import Mmines from './component/Mmines.vue'
@@ -17,7 +18,7 @@ import { BlockState } from './component/type'
 
 export default defineComponent({
   setup() {
-    const gameState = ref(gennerateGameState(9, 9, 10))
+    const gameState = ref(gennerateGameState(9, 9, 3))
     const mineRet = computed(() => {
       if (!gameState.value.mineGenerated) return gameState.value.mineCount
       let flags = 0
@@ -64,6 +65,10 @@ export default defineComponent({
         now.run()
       } else {
         now.stop()
+      }
+
+      if (gameStatus.value === 'won') {
+        fireWork()
       }
     })
 
