@@ -88,7 +88,7 @@ export function generateMines(
   undateNumbers(board)
 }
 
-function getArounds(board: BlockState[][], centerBlock: BlockState) {
+export function getArounds(board: BlockState[][], centerBlock: BlockState) {
   const aroundBlocks = directions
     .map((direction) => {
       const dx = direction[0]

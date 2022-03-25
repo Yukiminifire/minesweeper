@@ -9,13 +9,15 @@ import {
   gennerateGameState,
   checkGameStatus,
   useNow,
+  getArounds,
 } from './logic'
 import Timer from './component/Timer.vue'
 import Mmines from './component/Mmines.vue'
+import { BlockState } from './component/type'
 
 export default defineComponent({
   setup() {
-    const gameState = ref(gennerateGameState(10, 10, 3))
+    const gameState = ref(gennerateGameState(9, 9, 10))
     const mineRet = computed(() => {
       if (!gameState.value.mineGenerated) return gameState.value.mineCount
       let flags = 0
@@ -25,6 +27,16 @@ export default defineComponent({
         })
       })
       return gameState.value.mineCount - flags
+    })
+
+    const centerBlock = ref<null | BlockState>(null)
+
+    const arounds = computed(() => {
+      if (centerBlock.value) {
+        return getArounds(gameState.value.board, centerBlock.value)
+      } else {
+        return []
+      }
     })
 
     const gameStatus = computed(() => {
@@ -96,6 +108,8 @@ export default defineComponent({
       gennerateGameState,
       mineRet,
       barClass,
+      centerBlock,
+      arounds,
     }
   },
   components: { MyMineBlock, Footer, Timer, Mmines },
@@ -162,6 +176,27 @@ export default defineComponent({
               }
             }
           "
+          @mousedown="
+            () => {
+              if (gameStatus === 'play') {
+                centerBlock = block
+              }
+            }
+          "
+          @mouseup="
+            () => {
+              if (gameStatus === 'play') {
+                centerBlock = null
+              }
+            }
+          "
+          @mouseleave="
+            () => {
+              if (gameStatus === 'play') {
+                centerBlock = null
+              }
+            }
+          "
           @click="
             () => {
               if (gameStatus === 'play' || gameStatus === 'notReady') {
@@ -176,6 +211,7 @@ export default defineComponent({
               }
             }
           "
+          :is-in-arounds="arounds.includes(block)"
         />
       </div>
     </div>

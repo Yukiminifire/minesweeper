@@ -3,7 +3,7 @@ import { BlockState } from './type'
 import { isDev } from './storage/index'
 import Flag from './Flag.vue'
 import Mmines from './Mmines.vue'
-defineProps<{ block: BlockState }>()
+defineProps<{ block: BlockState; isInArounds: boolean }>()
 
 const numberColors = [
   'text-transparent',
@@ -35,10 +35,12 @@ function getblockClass(block: BlockState) {
     flex
     m-0.2
     justify-center
-    items-center ${getblockClass(block)}`"
+    items-center ${getblockClass(block)} ${
+      isInArounds && !block.revealed && !block.flagged ? 'bg-gray-500' : ''
+    }`"
   >
     <template v-if="block.flagged">
-      <div class="text-red-500 bg-gray-">
+      <div class="text-red-500">
         <Flag />
       </div>
     </template>
