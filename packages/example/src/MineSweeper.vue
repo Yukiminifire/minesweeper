@@ -22,7 +22,7 @@ import { BlockState } from './component/type'
 
 export default defineComponent({
   setup() {
-    const gameState = ref(gennerateGameState(9, 9, 3))
+    const gameState = ref(gennerateGameState(9, 9, 10))
     const mineRet = computed(() => {
       if (!gameState.value.mineGenerated) return gameState.value.mineCount
       let flags = 0
@@ -128,6 +128,7 @@ export default defineComponent({
       centerBlock,
       arounds,
       rankList,
+      name,
     }
   },
   components: { MyMineBlock, Footer, Timer, Mmines },
@@ -235,8 +236,15 @@ export default defineComponent({
     </div>
     {{ gameStatus }}
     <Footer />
-    <div v-for="(rank, index) in rankList" :key="rank.id">
-      {{ index + 1 }}. {{ rank.name }}: {{ rank.time }}
+
+    <div class="my-5 justify-center items-center">
+      <input
+        v-model="name"
+        class="text-black px-2 my-2 py-1 flex items-center rounded shadow-gray-500 shadow"
+      />
+      <div v-for="(rank, index) in rankList" :key="rank.id">
+        {{ index + 1 }}. {{ rank.name }}: {{ rank.time }}
+      </div>
     </div>
   </div>
 </template>
