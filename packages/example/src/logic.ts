@@ -220,7 +220,7 @@ function autoExpend(board: BlockState[][], centerBlock: BlockState) {
       return sum + (i.revealed ? 1 : 0)
     }, 0)
 
-    const unRevealed = 8 - revealed - flags
+    const unRevealed = arounds.length - revealed - flags
 
     if (centerBlock.adjacentMines - flags === unRevealed) {
       arounds
