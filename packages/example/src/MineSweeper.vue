@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, Ref, ref, watch } from 'vue'
 import MyMineBlock from './component/MyMineBlock.vue'
 import Footer from './component/Footer.vue'
 import {
@@ -11,6 +11,10 @@ import {
   useNow,
   getArounds,
   fireWork,
+  saveToCloud,
+  getRankList,
+  RankInfo,
+  cloudbase,
 } from './logic'
 import Timer from './component/Timer.vue'
 import Mmines from './component/Mmines.vue'
@@ -60,7 +64,14 @@ export default defineComponent({
 
     const now = useNow()
 
-    watch(gameStatus, (newValue, oldValue) => {
+    const name = ref('yby')
+    const rankList: Ref<RankInfo[]> = ref([])
+
+    watch(cloudbase.status, async () => {
+      rankList.value = await getRankList()
+    })
+
+    watch(gameStatus, async (newValue, oldValue) => {
       if (gameStatus.value === 'play') {
         now.run()
       } else {
@@ -69,11 +80,12 @@ export default defineComponent({
 
       if (gameStatus.value === 'won') {
         fireWork()
+        await saveToCloud(name.value, deltaTime.value)
+        rankList.value = await getRankList()
       }
     })
 
     const deltaTime = computed(() => {
-      console.log('deltaTime')
       now.now.value
       if (Number.isNaN(gameState.value.time.end)) {
         return Math.round((Date.now() - gameState.value.time.start || 0) / 1000)
@@ -115,6 +127,7 @@ export default defineComponent({
       barClass,
       centerBlock,
       arounds,
+      rankList,
     }
   },
   components: { MyMineBlock, Footer, Timer, Mmines },
@@ -123,7 +136,7 @@ export default defineComponent({
 
 <template>
   <div
-    class="flex flex-col dark:bg-gray-900 h-screen items-center dark:text-white py-4"
+    class="flex flex-col dark:bg-gray-900 min-h-screen items-center dark:text-white py-4"
   >
     <h1>Minesweeper</h1>
     <div class="flex gap-2 my-3 justify-center items-center">
@@ -147,7 +160,7 @@ export default defineComponent({
       >
         Medium
       </button>
-      <button
+      <!-- <button
         @click="
           () => {
             gameState = gennerateGameState(30, 16, 99)
@@ -156,7 +169,7 @@ export default defineComponent({
         class="flex border-teal-400 px-3 rounded bg-teal-400 py-2 justify-center items-center"
       >
         Hard
-      </button>
+      </button> -->
     </div>
     <div class="flex gap-6 justify-center items-center text-xl">
       <div :class="`flex gap-2 justify-center items-center ${barClass}`">
@@ -222,5 +235,8 @@ export default defineComponent({
     </div>
     {{ gameStatus }}
     <Footer />
+    <div v-for="(rank, index) in rankList" :key="rank.id">
+      {{ index + 1 }}. {{ rank.name }}: {{ rank.time }}
+    </div>
   </div>
 </template>

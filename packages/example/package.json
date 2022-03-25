@@ -21,6 +21,7 @@
     "windicss": "^3.4.3"
   },
   "dependencies": {
+    "@cloudbase/js-sdk": "^1.7.2",
     "@template/template": "workspace:*",
     "@types/canvas-confetti": "^1.4.2",
     "@vueuse/core": "^8.1.2",

@@ -1,5 +1,7 @@
 import { ref } from 'vue'
 import { BlockState } from './component/type'
+import confetti from 'canvas-confetti'
+import { useCloudbase } from './database'
 
 export function generateBoard(width: number, height: number) {
   const myBoard: BlockState[][] = []
@@ -60,7 +62,7 @@ const directions = [
   [-1, 1],
   [0, 1],
 ]
-type GameStatus = 'play' | 'won' | 'lost'
+export type GameStatus = 'play' | 'won' | 'lost'
 
 function generateMine(board: BlockState[][], initBlock: BlockState) {
   const x = Math.floor(Math.random() * board[0].length)
@@ -187,8 +189,6 @@ function revealeBlock(board: BlockState[][], centerBlock: BlockState) {
 export function onClick(gameState: GameState, block: BlockState) {
   const { mineGenerated, board } = gameState
 
-  console.log('onClick')
-
   if (!mineGenerated) {
     initGameState(gameState, block)
   }
@@ -200,8 +200,6 @@ export function onClick(gameState: GameState, block: BlockState) {
 
 export function onDbClick(gameState: GameState, block: BlockState) {
   const { board } = gameState
-
-  console.log('onDbClick')
 
   if (!block.flagged) {
     autoExpend(board, block)
@@ -319,7 +317,6 @@ export function useNow() {
   }
 }
 
-import confetti from 'canvas-confetti'
 var count = 200
 var defaults = {
   origin: { y: 0.7 },
@@ -355,4 +352,39 @@ export function fireWork() {
     spread: 120,
     startVelocity: 45,
   })
+}
+
+export const cloudbase = useCloudbase()
+
+export async function saveToCloud(name: string, time: number) {
+  if (cloudbase.status.value === 'ready') {
+    const db = cloudbase.app.database()
+    const res = await db.collection('rankDataBase').add({
+      name,
+      time: time,
+    })
+    console.log('save res', res)
+  }
+}
+
+export interface RankInfo {
+  name: string
+  id: string
+  time: number
+  status: GameStatus
+}
+
+export async function getRankList() {
+  if (cloudbase.status.value === 'ready') {
+    const db = cloudbase.app.database()
+    const rankResult = await db
+      .collection('rankDataBase')
+      .orderBy('time', 'asc')
+      .limit(10)
+      .get()
+
+    return rankResult.data as RankInfo[]
+  } else {
+    return []
+  }
 }
