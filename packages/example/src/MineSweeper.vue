@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch, watchEffect } from 'vue'
+import { computed, defineComponent, ref, watch } from 'vue'
 import MyMineBlock from './component/MyMineBlock.vue'
 import Footer from './component/Footer.vue'
 import {
@@ -21,8 +21,14 @@ export default defineComponent({
         : 'notReady'
     })
 
-    watchEffect(() => {
+    const isGameOver = computed(() => {
       if (gameStatus.value === 'lost' || gameStatus.value === 'won') {
+        return true
+      }
+    })
+
+    watch(isGameOver, () => {
+      if (isGameOver.value && !gameState.value.time.end) {
         gameState.value.time.end = Date.now()
       }
     })
