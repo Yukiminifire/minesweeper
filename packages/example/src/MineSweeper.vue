@@ -18,16 +18,12 @@ export default defineComponent({
     const gameState = ref(gennerateGameState(10, 10, 3))
     const mineRet = computed(() => {
       if (!gameState.value.mineGenerated) return gameState.value.mineCount
-
-      const flags = gameState.value.board.reduce((rSum, i) => {
-        return (
-          rSum +
-          i.reduce((bsum, i) => {
-            return bsum + (i.flagged ? 1 : 0)
-          }, 0)
-        )
-      }, 0)
-
+      let flags = 0
+      gameState.value.board.forEach((row) => {
+        row.forEach((block) => {
+          flags += block.flagged ? 1 : 0
+        })
+      })
       return gameState.value.mineCount - flags
     })
 
@@ -71,6 +67,25 @@ export default defineComponent({
       }
     })
 
+    const barClass = computed(() => {
+      switch (gameStatus.value) {
+        case 'notReady':
+          return 'text-gray-500'
+          break
+        case 'lost':
+          return 'text-red-500'
+          break
+        case 'play':
+          return ''
+
+          break
+        case 'won':
+          return 'text-green-500'
+        default:
+          break
+      }
+    })
+
     return {
       gameState,
       onRightClick,
@@ -80,6 +95,7 @@ export default defineComponent({
       deltaTime,
       gennerateGameState,
       mineRet,
+      barClass,
     }
   },
   components: { MyMineBlock, Footer, Timer, Mmines },
@@ -124,15 +140,11 @@ export default defineComponent({
       </button>
     </div>
     <div class="flex gap-6 justify-center items-center text-xl">
-      <div
-        :class="`flex gap-2 justify-center items-center ${
-          gameStatus === 'notReady' ? 'text-gray-500' : ''
-        }`"
-      >
+      <div :class="`flex gap-2 justify-center items-center ${barClass}`">
         <Timer />
         {{ deltaTime }}
       </div>
-      <div class="flex gap-1 justify-center items-center">
+      <div :class="`flex gap-2 justify-center items-center ${barClass}`">
         <Mmines />
         {{ mineRet }}
       </div>
