@@ -62,6 +62,7 @@ export default defineComponent({
       onDbClick,
       gameStatus,
       deltaTime,
+      gennerateGameState,
     }
   },
   components: { MyMineBlock, Footer },
@@ -73,6 +74,38 @@ export default defineComponent({
     class="flex flex-col dark:bg-gray-900 h-screen items-center dark:text-white py-4"
   >
     <h1>Minesweeper</h1>
+    <div class="flex gap-2 my-3 justify-center items-center">
+      <button
+        @click="
+          () => {
+            gameState = gennerateGameState(9, 9, 10)
+          }
+        "
+        class="flex border-teal-400 px-3 rounded bg-teal-400 py-2 justify-center items-center"
+      >
+        Easy
+      </button>
+      <button
+        @click="
+          () => {
+            gameState = gennerateGameState(16, 16, 40)
+          }
+        "
+        class="flex border-teal-400 px-3 rounded bg-teal-400 py-2 justify-center items-center"
+      >
+        Medium
+      </button>
+      <button
+        @click="
+          () => {
+            gameState = gennerateGameState(30, 16, 99)
+          }
+        "
+        class="flex border-teal-400 px-3 rounded bg-teal-400 py-2 justify-center items-center"
+      >
+        Hard
+      </button>
+    </div>
     <div>
       {{ deltaTime }}
     </div>
