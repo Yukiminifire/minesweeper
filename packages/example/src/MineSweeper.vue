@@ -124,7 +124,11 @@ export default defineComponent({
       </button>
     </div>
     <div class="flex gap-6 justify-center items-center text-xl">
-      <div class="flex gap-2 justify-center items-center">
+      <div
+        :class="`flex gap-2 justify-center items-center ${
+          gameStatus === 'notReady' ? 'text-gray-500' : ''
+        }`"
+      >
         <Timer />
         {{ deltaTime }}
       </div>
