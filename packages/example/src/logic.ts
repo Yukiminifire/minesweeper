@@ -1,3 +1,4 @@
+import { ref } from 'vue'
 import { BlockState } from './component/type'
 
 export function generateBoard(width: number, height: number) {
@@ -280,4 +281,40 @@ export function checkGameStatus(gameState: GameState): GameStatus {
   }
 
   return 'play'
+}
+
+export function useNow() {
+  const now = ref(0)
+
+  type TStatus = 'running' | 'pause'
+  const status = ref<TStatus>('pause')
+
+  function updateNow() {
+    if (status.value === 'running') {
+      now.value = Date.now()
+
+      setTimeout(() => {
+        updateNow()
+      }, 1000)
+    }
+  }
+
+  function run() {
+    console.log('run')
+    if (status.value !== 'running') {
+      status.value = 'running'
+      updateNow()
+    }
+  }
+
+  function stop() {
+    now.value = Date.now()
+    status.value = 'pause'
+  }
+
+  return {
+    run,
+    now,
+    stop,
+  }
 }

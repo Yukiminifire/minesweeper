@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watchEffect } from 'vue'
+import { computed, defineComponent, ref, watch, watchEffect } from 'vue'
 import MyMineBlock from './component/MyMineBlock.vue'
 import Footer from './component/Footer.vue'
 import {
@@ -8,6 +8,7 @@ import {
   onDbClick,
   gennerateGameState,
   checkGameStatus,
+  useNow,
 } from './logic'
 
 export default defineComponent({
@@ -15,34 +16,31 @@ export default defineComponent({
     const gameState = ref(gennerateGameState(10, 10, 3))
 
     const gameStatus = computed(() => {
-      return checkGameStatus(gameState.value)
+      return gameState.value.mineGenerated
+        ? checkGameStatus(gameState.value)
+        : 'notReady'
     })
 
     watchEffect(() => {
-      if (gameStatus.value !== 'play') {
+      if (gameStatus.value === 'lost' || gameStatus.value === 'won') {
         gameState.value.time.end = Date.now()
       }
     })
 
-    const now = ref(0)
+    const now = useNow()
 
-    function updateNow() {
-      console.log(gameStatus.value)
-      now.value++
-      setTimeout(() => {
-        updateNow()
-      }, 1000)
-    }
-
-    // watch(gameStatus, (newValue, oldValue) => {
-    //   if (gameStatus.value === 'play') {
-    //     }
-    // })
-    updateNow()
+    watch(gameStatus, (newValue, oldValue) => {
+      if (gameStatus.value === 'play') {
+        now.run()
+      } else {
+        now.stop()
+      }
+    })
 
     const deltaTime = computed(() => {
+      console.log('deltaTime')
+      now.now.value
       if (Number.isNaN(gameState.value.time.end)) {
-        now.value
         return Math.round((Date.now() - gameState.value.time.start || 0) / 1000)
       } else {
         return Math.round(
@@ -87,7 +85,7 @@ export default defineComponent({
           "
           @click="
             () => {
-              if (gameStatus === 'play') {
+              if (gameStatus === 'play' || gameStatus === 'notReady') {
                 onClick(gameState, block)
               }
             }
