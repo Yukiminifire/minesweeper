@@ -10,10 +10,26 @@ import {
   checkGameStatus,
   useNow,
 } from './logic'
+import Timer from './component/Timer.vue'
+import Mmines from './component/Mmines.vue'
 
 export default defineComponent({
   setup() {
     const gameState = ref(gennerateGameState(10, 10, 3))
+    const mineRet = computed(() => {
+      if (!gameState.value.mineGenerated) return gameState.value.mineCount
+
+      const flags = gameState.value.board.reduce((rSum, i) => {
+        return (
+          rSum +
+          i.reduce((bsum, i) => {
+            return bsum + (i.flagged ? 1 : 0)
+          }, 0)
+        )
+      }, 0)
+
+      return gameState.value.mineCount - flags
+    })
 
     const gameStatus = computed(() => {
       return gameState.value.mineGenerated
@@ -63,9 +79,10 @@ export default defineComponent({
       gameStatus,
       deltaTime,
       gennerateGameState,
+      mineRet,
     }
   },
-  components: { MyMineBlock, Footer },
+  components: { MyMineBlock, Footer, Timer, Mmines },
 })
 </script>
 
@@ -106,8 +123,15 @@ export default defineComponent({
         Hard
       </button>
     </div>
-    <div>
-      {{ deltaTime }}
+    <div class="flex gap-6 justify-center items-center text-xl">
+      <div class="flex gap-2 justify-center items-center">
+        <Timer />
+        {{ deltaTime }}
+      </div>
+      <div class="flex gap-1 justify-center items-center">
+        <Mmines />
+        {{ mineRet }}
+      </div>
     </div>
     <div class="flex py-3">
       <div v-for="(row, y) in gameState.board" :key="y">
