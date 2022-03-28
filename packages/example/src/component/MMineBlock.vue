@@ -24,9 +24,8 @@ function getblockClass(block: BlockState) {
 }
 </script>
 <template>
-  <div>
-    <button
-      :class="`
+  <button
+    :class="`
       w-8
       h-8 
       m-0.2 
@@ -37,20 +36,20 @@ function getblockClass(block: BlockState) {
       items-center
       ${getblockClass(block)}
       `"
-    >
-      <template v-if="block.flagged">
-        <div class="text-red-500">
-          <MyFlag />
-        </div>
-      </template>
-      <template v-else-if="block.revealed">
-        <div v-if="block.isMine">
-          <MyMine />
-        </div>
-        <div v-else>
-          {{ block.adjacentMine }}
-        </div>
-      </template>
-    </button>
-  </div>
+  >
+    <template v-if="block.flagged">
+      <div class="text-red-500">
+        <MyFlag />
+      </div>
+    </template>
+    <template v-else-if="block.revealed">
+      <div v-if="block.isMine">
+        <MyMine />
+      </div>
+      <div v-else>
+        {{ block.adjacentMine }}
+      </div>
+    </template>
+    0
+  </button>
 </template>

@@ -52,7 +52,7 @@ const direction = [
   [-1, -1],
 ]
 
-function getArounds(board: BlockState[][], centerBlcok: BlockState) {
+export function getArounds(board: BlockState[][], centerBlcok: BlockState) {
   const aroundBlocks = direction
     .map((direction) => {
       const dx = direction[0]
@@ -69,4 +69,31 @@ function getArounds(board: BlockState[][], centerBlcok: BlockState) {
       return Boolean(aroundBlocks)
     }) as BlockState[]
   return aroundBlocks
+}
+
+export interface GameState {
+  board: BlockState[][]
+  isMineGenerated: boolean
+  mineCount: number
+  time: {
+    start: number
+    end: number
+  }
+}
+
+export function generateGameState(
+  width: number,
+  height: number,
+  mineCount: number,
+) {
+  const gameState: GameState = {
+    board: generateBoard(width, height),
+    isMineGenerated: false,
+    mineCount,
+    time: {
+      start: NaN,
+      end: NaN,
+    },
+  }
+  return gameState
 }

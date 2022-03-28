@@ -1,28 +1,29 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { generateBoard } from './logic'
+import { generateBoard, onClick } from './logic'
 import MyFooter from './component/MyFooter.vue'
-import MyMineBlock from './component/MyMineBlock.vue'
+import MMineBlock from './component/MMineBlock.vue'
 
 export default defineComponent({
   setup() {
     const myBoard = ref(generateBoard(10, 10))
     return {
       myBoard,
+      onClick,
     }
   },
-  components: { MyFooter, MyMineBlock },
+  components: { MyFooter, MMineBlock },
 })
 </script>
 
 <template>
   <div
-    class="flex flex-col items-center dark:bg-gray-900 dark:text-white min-h-screen"
+    class="flex flex-col dark:bg-gray-900 dark:text-white min-h-screen items-center py-4"
   >
     <h1>Minesweeper</h1>
-    <div class="flex py-3">
+    <div class="flex flex-col py-3">
       <div v-for="(row, y) in myBoard" :key="y">
-        <MyMineBlock v-for="(block, x) in row" :key="x" :block="block" />
+        <MMineBlock v-for="(block, x) in row" :key="x" :block="block" />
       </div>
     </div>
     <MyFooter />
