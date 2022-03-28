@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { generateBoard, onClick } from './logic'
+import { generateBoard } from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 
@@ -9,7 +9,6 @@ export default defineComponent({
     const myBoard = ref(generateBoard(10, 10))
     return {
       myBoard,
-      onClick,
     }
   },
   components: { MyFooter, MMineBlock },

@@ -97,3 +97,13 @@ export function generateGameState(
   }
   return gameState
 }
+
+export function initGameState(gameState: GameState, block: BlockState) {
+  const { board, mineCount, isMineGenerated } = gameState
+  if (isMineGenerated) {
+    throw new Error('game state is already inited')
+  }
+  generateMines(board, mineCount, block)
+  gameState.isMineGenerated = true
+  gameState.time.start = Date.now()
+}
