@@ -31,7 +31,7 @@ function generateMine(board: BlockState[][], initBlcok: BlockState) {
   }
 }
 
-function generateMines(
+export function generateMines(
   board: BlockState[][],
   mineCount: number,
   initBlcok: BlockState,
@@ -39,4 +39,34 @@ function generateMines(
   for (let index = 0; index < mineCount; index++) {
     generateMine(board, initBlcok)
   }
+}
+
+const direction = [
+  [1, 1],
+  [1, 0],
+  [1, -1],
+  [0, 1],
+  [0, -1],
+  [-1, 1],
+  [-1, 0],
+  [-1, -1],
+]
+
+function getArounds(board: BlockState[][], centerBlcok: BlockState) {
+  const aroundBlocks = direction
+    .map((direction) => {
+      const dx = direction[0]
+      const dy = direction[1]
+      const x = centerBlcok.x + dx
+      const y = centerBlcok.y + dy
+      if (x === board[0].length || y === board.length || x === -1 || y === -1) {
+        return null
+      } else {
+        return board[y][x]
+      }
+    })
+    .filter((aroundBlocks) => {
+      return Boolean(aroundBlocks)
+    }) as BlockState[]
+  return aroundBlocks
 }
