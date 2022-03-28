@@ -19,3 +19,24 @@ export function generateBoard(width: number, height: number) {
   }
   return board
 }
+
+function generateMine(board: BlockState[][], initBlcok: BlockState) {
+  const x = Math.floor(Math.random() * board[0].length)
+  const y = Math.floor(Math.random() * board.length)
+  const randomBlock = board[y][x]
+  if (randomBlock.isMine || (initBlcok.x === x && initBlcok.y === y)) {
+    generateMine(board, initBlcok)
+  } else {
+    randomBlock.isMine = true
+  }
+}
+
+function generateMines(
+  board: BlockState[][],
+  mineCount: number,
+  initBlcok: BlockState,
+) {
+  for (let index = 0; index < mineCount; index++) {
+    generateMine(board, initBlcok)
+  }
+}
