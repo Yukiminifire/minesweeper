@@ -1,10 +1,4 @@
-interface BlockState {
-  x: number
-  y: number
-  isMine: boolean
-  flagged: boolean
-  adjacentMine: number
-}
+import { BlockState } from './component/type'
 
 export function generateBoard(width: number, height: number) {
   const board: BlockState[][] = []
@@ -15,6 +9,7 @@ export function generateBoard(width: number, height: number) {
       const block: BlockState = {
         x,
         y,
+        revealed: false,
         isMine: false,
         flagged: false,
         adjacentMine: 0,

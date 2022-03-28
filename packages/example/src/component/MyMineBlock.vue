@@ -1,0 +1,56 @@
+<script setup lang="ts">
+import { BlockState } from './type'
+import MyFlag from './MyFlag.vue'
+import MyMine from './MyMine.vue'
+defineProps<{ block: BlockState }>()
+
+const numberColors = [
+  'text-transparent',
+  'text-blue-500',
+  'text-green-500',
+  'text-yellow-500',
+  'tect-orange-500',
+  'tect-red-500',
+  'tect-purple-500',
+  'tect-pink-500',
+  'tect-teal-500',
+]
+
+function getblockClass(block: BlockState) {
+  if (!block.revealed && !block.flagged) {
+    return 'bg-gray-500/40 hover:bg-gray-400'
+  }
+  return block.isMine ? 'bg-red-500' : numberColors[block.adjacentMine]
+}
+</script>
+<template>
+  <div>
+    <button
+      :class="`
+      w-8
+      h-8 
+      m-0.2 
+      border 
+      border-gray-500 
+      dark: bg-gray-500/40 
+      justify-center 
+      items-center
+      ${getblockClass(block)}
+      `"
+    >
+      <template v-if="block.flagged">
+        <div class="text-red-500">
+          <MyFlag />
+        </div>
+      </template>
+      <template v-else-if="block.revealed">
+        <div v-if="block.isMine">
+          <MyMine />
+        </div>
+        <div v-else>
+          {{ block.adjacentMine }}
+        </div>
+      </template>
+    </button>
+  </div>
+</template>
