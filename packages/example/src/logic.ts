@@ -39,6 +39,7 @@ export function generateMines(
   for (let index = 0; index < mineCount; index++) {
     generateMine(board, initBlcok)
   }
+  updateNumbers(board)
 }
 
 const direction = [
@@ -108,11 +109,32 @@ export function initGameState(gameState: GameState, block: BlockState) {
   gameState.time.start = Date.now()
 }
 
-function revealeBlocks(board: BlockState[][], centerBlcok: BlockState) {
-  centerBlcok.revealed = true
+function expendZero(board: BlockState[][], centerBlcok: BlockState) {
+  if (centerBlcok.isMine) {
+    throw new Error('不能展开雷')
+  }
+  if (!centerBlcok.revealed) {
+    throw new Error('不能展开未翻开的格子')
+  }
+  if (centerBlcok.adjacentMine === 0) {
+    const arounds = getArounds(board, centerBlcok)
+    arounds.forEach((i) => {
+      if (!i.revealed) {
+        i.revealed = true
+        expendZero(board, i)
+      }
+    })
+  }
 }
 
-function showAllMines(board: BlockState[][], centerBlcok: BlockState) {
+function revealeBlocks(board: BlockState[][], centerBlcok: BlockState) {
+  centerBlcok.revealed = true
+  if (!centerBlcok.isMine) {
+    expendZero(board, centerBlcok)
+  }
+}
+
+export function showAllMines(board: BlockState[][], centerBlcok: BlockState) {
   if (centerBlcok.isMine) {
     board.forEach((row) => {
       row.forEach((block) => {
@@ -132,7 +154,26 @@ export function onClick(gameState: GameState, block: BlockState) {
   if (!block.flagged) {
     revealeBlocks(board, block)
   }
-  if (block.isMine) {
-    showAllMines(board, block)
+}
+
+export function onRightClick(block: BlockState) {
+  if (!block.flagged) {
+    block.flagged = true
+  } else {
+    block.flagged = false
   }
+}
+
+function updateNumbers(board: BlockState[][]) {
+  board.forEach((row) => {
+    row.forEach((block) => {
+      if (!block.isMine) {
+        getArounds(board, block).forEach((i) => {
+          if (i.isMine) {
+            block.adjacentMine += 1
+          }
+        })
+      }
+    })
+  })
 }

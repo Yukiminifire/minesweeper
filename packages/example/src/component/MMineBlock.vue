@@ -18,8 +18,8 @@ const numberColors = [
 ]
 
 function getblockClass(block: BlockState) {
-  if (!block.revealed && !block.flagged) {
-    return 'bg-gray-500/40 hover:bg-gray-400'
+  if (!block.revealed) {
+    return 'bg-gray-500/30 hover:bg-gray-400'
   }
   return block.isMine ? 'bg-red-500' : numberColors[block.adjacentMine]
 }
@@ -33,7 +33,6 @@ function getblockClass(block: BlockState) {
       m-0.2 
       border 
       border-gray-500 
-      dark: bg-gray-500/40 
       justify-center 
       items-center
       ${getblockClass(block)}
@@ -48,10 +47,9 @@ function getblockClass(block: BlockState) {
       <div v-if="block.isMine">
         <MyMine />
       </div>
-      <div v-else>
+      <div v-else class="font-bold">
         {{ block.adjacentMine }}
       </div>
     </template>
-    0
   </button>
 </template>
