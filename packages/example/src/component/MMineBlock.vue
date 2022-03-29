@@ -2,6 +2,7 @@
 import { BlockState } from './type'
 import MyFlag from './MyFlag.vue'
 import MyMine from './MyMine.vue'
+import { isDev } from './storage/index'
 defineProps<{ block: BlockState }>()
 
 const numberColors = [
@@ -26,6 +27,7 @@ function getblockClass(block: BlockState) {
 <template>
   <button
     :class="`
+    flex   
       w-8
       h-8 
       m-0.2 
@@ -42,7 +44,7 @@ function getblockClass(block: BlockState) {
         <MyFlag />
       </div>
     </template>
-    <template v-else-if="block.revealed">
+    <template v-else-if="block.revealed || isDev">
       <div v-if="block.isMine">
         <MyMine />
       </div>

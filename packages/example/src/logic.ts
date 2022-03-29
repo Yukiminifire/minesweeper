@@ -107,3 +107,32 @@ export function initGameState(gameState: GameState, block: BlockState) {
   gameState.isMineGenerated = true
   gameState.time.start = Date.now()
 }
+
+function revealeBlocks(board: BlockState[][], centerBlcok: BlockState) {
+  centerBlcok.revealed = true
+}
+
+function showAllMines(board: BlockState[][], centerBlcok: BlockState) {
+  if (centerBlcok.isMine) {
+    board.forEach((row) => {
+      row.forEach((block) => {
+        if (block.isMine) {
+          block.revealed = true
+        }
+      })
+    })
+  }
+}
+
+export function onClick(gameState: GameState, block: BlockState) {
+  const { board, isMineGenerated } = gameState
+  if (!isMineGenerated) {
+    initGameState(gameState, block)
+  }
+  if (!block.flagged) {
+    revealeBlocks(board, block)
+  }
+  if (block.isMine) {
+    showAllMines(board, block)
+  }
+}
