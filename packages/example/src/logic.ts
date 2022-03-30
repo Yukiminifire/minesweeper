@@ -210,3 +210,9 @@ export function autoExpend(board: BlockState[][], centerBlcok: BlockState) {
     }
   }
 }
+
+export function dbClick(board: BlockState[][], block: BlockState) {
+  if (!block.flagged) {
+    autoExpend(board, block)
+  }
+}

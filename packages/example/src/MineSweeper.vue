@@ -1,6 +1,6 @@
 <script lang="ts">
 import { defineComponent, ref } from 'vue'
-import { generateGameState, onClick, onRightClick } from './logic'
+import { generateGameState, onClick, onRightClick, dbClick } from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 
@@ -11,6 +11,7 @@ export default defineComponent({
       gameState,
       onClick,
       onRightClick,
+      dbClick,
     }
   },
   components: { MyFooter, MMineBlock },
@@ -34,6 +35,7 @@ export default defineComponent({
           :block="block"
           @click="onClick(gameState, block)"
           @contextmenu.prevent="onRightClick(block)"
+          @dblclick="dbClick(gameState.board, block)"
         />
       </div>
     </div>
