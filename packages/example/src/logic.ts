@@ -216,3 +216,40 @@ export function dbClick(board: BlockState[][], block: BlockState) {
     autoExpend(board, block)
   }
 }
+
+type GameStatus = 'play' | 'won' | 'lost'
+
+function checkGameState(gameState: GameState): GameStatus {
+  const { board, mineCount } = gameState
+  const isLost = board.some((row) => {
+    return row.some((block) => {
+      return block.isMine && block.revealed
+    })
+  })
+
+  if (isLost) {
+    return 'lost'
+  }
+
+  const flags = board.reduce((rSum, row) => {
+    return (
+      rSum +
+      row.reduce((sum, block) => {
+        return sum + (block.flagged ? 1 : 0)
+      }, 0)
+    )
+  }, 0)
+  const unRevealed = board.reduce((rSum, row) => {
+    return (
+      rSum +
+      row.reduce((sum, block) => {
+        return sum + (!block.revealed && !block.flagged ? 1 : 0)
+      }, 0)
+    )
+  }, 0)
+  const isWin = flags + unRevealed === mineCount
+  if (isWin) {
+    return 'won'
+  }
+  return 'play'
+}
