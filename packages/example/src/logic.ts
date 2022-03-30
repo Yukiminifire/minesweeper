@@ -177,3 +177,36 @@ function updateNumbers(board: BlockState[][]) {
     })
   })
 }
+
+export function autoExpend(board: BlockState[][], centerBlcok: BlockState) {
+  if (centerBlcok.adjacentMine > 0) {
+    const arounds = getArounds(board, centerBlcok)
+    const flags = arounds.reduce((sum, i) => {
+      return sum + (i.flagged ? 1 : 0)
+    }, 0)
+
+    const revealed = arounds.reduce((sum, i) => {
+      return sum + (i.revealed ? 1 : 0)
+    }, 0)
+    const unRevealed = arounds.length - flags - revealed
+    if (centerBlcok.adjacentMine - flags === unRevealed) {
+      arounds
+        .filter((i) => {
+          return !i.revealed && !i.flagged
+        })
+        .forEach((i) => {
+          i.flagged = true
+        })
+    }
+    if (centerBlcok.adjacentMine - flags === 0 && unRevealed > 0) {
+      arounds
+        .filter((i) => {
+          return !i.revealed && !i.flagged
+        })
+        .forEach((i) => {
+          i.revealed = true
+          expendZero(board, i)
+        })
+    }
+  }
+}
