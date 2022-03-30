@@ -135,16 +135,14 @@ function revealeBlocks(board: BlockState[][], centerBlcok: BlockState) {
   }
 }
 
-export function showAllMines(board: BlockState[][], centerBlcok: BlockState) {
-  if (centerBlcok.isMine) {
-    board.forEach((row) => {
-      row.forEach((block) => {
-        if (block.isMine) {
-          block.revealed = true
-        }
-      })
+export function showAllMines(board: BlockState[][]) {
+  board.forEach((row) => {
+    row.forEach((block) => {
+      if (block.isMine) {
+        block.revealed = true
+      }
     })
-  }
+  })
 }
 
 export function onClick(gameState: GameState, block: BlockState) {
@@ -218,7 +216,7 @@ export function dbClick(board: BlockState[][], block: BlockState) {
   }
 }
 
-type GameStatus = 'play' | 'won' | 'lost'
+export type GameStatus = 'play' | 'won' | 'lost'
 
 export function checkGameState(gameState: GameState): GameStatus {
   const { board, mineCount } = gameState

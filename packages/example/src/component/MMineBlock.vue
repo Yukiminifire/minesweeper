@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { BlockState } from './type'
+import { GameStatus } from '../logic'
 import MyFlag from './MyFlag.vue'
 import MyMine from './MyMine.vue'
 import { isDev } from './storage/index'
-defineProps<{ block: BlockState }>()
+defineProps<{ block: BlockState; gameStaus: GameStatus | 'notReady' }>()
 
 const numberColors = [
   'text-transparent',
@@ -49,6 +50,14 @@ function getblockClass(block: BlockState) {
       </div>
       <div v-else class="font-bold">
         {{ block.adjacentMine }}
+      </div>
+    </template>
+    <template v-else-if="gameStaus === 'lost'">
+      <div
+        v-if="block.isMine"
+        class="w-full h-full flex items-center justify-center bg-red-500"
+      >
+        <MyMine />
       </div>
     </template>
   </button>

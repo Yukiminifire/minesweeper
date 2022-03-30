@@ -1,17 +1,38 @@
 <script lang="ts">
-import { defineComponent, ref } from 'vue'
-import { generateGameState, onClick, onRightClick, dbClick } from './logic'
+import { computed, defineComponent, ref, watch } from 'vue'
+import {
+  generateGameState,
+  onClick,
+  onRightClick,
+  dbClick,
+  checkGameState,
+  fireWork,
+} from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 
 export default defineComponent({
   setup() {
     const gameState = ref(generateGameState(10, 10, 10))
+
+    const gameStatus = computed(() => {
+      return gameState.value.isMineGenerated
+        ? checkGameState(gameState.value)
+        : 'notReady'
+    })
+
+    watch(gameStatus, async (newValue, oldValue) => {
+      if (gameStatus.value === 'won') {
+        fireWork()
+      }
+    })
+
     return {
       gameState,
       onClick,
       onRightClick,
       dbClick,
+      gameStatus,
     }
   },
   components: { MyFooter, MMineBlock },
@@ -36,9 +57,11 @@ export default defineComponent({
           @click="onClick(gameState, block)"
           @contextmenu.prevent="onRightClick(block)"
           @dblclick="dbClick(gameState.board, block)"
+          :gameStaus="gameStatus"
         />
       </div>
     </div>
+    {{ gameStatus }}
     <MyFooter />
   </div>
 </template>
