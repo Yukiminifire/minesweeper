@@ -12,6 +12,7 @@ import {
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 import { BlockState } from './component/type'
+import MyMine from './component/MyMine.vue'
 
 export default defineComponent({
   setup() {
@@ -39,6 +40,17 @@ export default defineComponent({
       }
     })
 
+    const mineRet = computed(() => {
+      if (!gameState.value.isMineGenerated) return gameState.value.mineCount
+      let flags = 0
+      gameState.value.board.forEach((row) => {
+        row.forEach((block) => {
+          flags += block.flagged ? 1 : 0
+        })
+      })
+      return gameState.value.mineCount - flags
+    })
+
     return {
       gameState,
       onClick,
@@ -47,9 +59,10 @@ export default defineComponent({
       gameStatus,
       arounds,
       centerBlock,
+      mineRet,
     }
   },
-  components: { MyFooter, MMineBlock },
+  components: { MyFooter, MMineBlock, MyMine },
 })
 </script>
 
@@ -58,6 +71,10 @@ export default defineComponent({
     class="flex flex-col dark:bg-gray-900 dark:text-white min-h-screen items-center py-4"
   >
     <h1>Minesweeper</h1>
+    <div class="flex justify-center items-center gap-1">
+      <MyMine />
+      {{ mineRet }}
+    </div>
     <div class="flex flex-col py-3">
       <div
         v-for="(row, y) in gameState.board"
