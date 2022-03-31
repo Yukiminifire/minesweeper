@@ -4,7 +4,11 @@ import { GameStatus } from '../logic'
 import MyFlag from './MyFlag.vue'
 import MyMine from './MyMine.vue'
 import { isDev } from './storage/index'
-defineProps<{ block: BlockState; gameStaus: GameStatus | 'notReady' }>()
+defineProps<{
+  block: BlockState
+  gameStaus: GameStatus | 'notReady'
+  isInArounds: boolean
+}>()
 
 const numberColors = [
   'text-transparent',
@@ -37,6 +41,7 @@ function getblockClass(block: BlockState) {
       justify-center 
       items-center
       ${getblockClass(block)}
+      ${isInArounds && !block.revealed && !block.flagged ? 'bg-blue-500' : ''}
       `"
   >
     <template v-if="block.flagged">

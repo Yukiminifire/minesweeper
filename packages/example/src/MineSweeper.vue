@@ -7,9 +7,11 @@ import {
   dbClick,
   checkGameState,
   fireWork,
+  getArounds,
 } from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
+import { BlockState } from './component/type'
 
 export default defineComponent({
   setup() {
@@ -27,12 +29,24 @@ export default defineComponent({
       }
     })
 
+    const centerBlock = ref<null | BlockState>(null)
+
+    const arounds = computed(() => {
+      if (centerBlock.value) {
+        return getArounds(gameState.value.board, centerBlock.value)
+      } else {
+        return []
+      }
+    })
+
     return {
       gameState,
       onClick,
       onRightClick,
       dbClick,
       gameStatus,
+      arounds,
+      centerBlock,
     }
   },
   components: { MyFooter, MMineBlock },
@@ -55,9 +69,25 @@ export default defineComponent({
           :key="x"
           :block="block"
           @click="onClick(gameState, block)"
+          @mousedown="
+            () => {
+              centerBlock = block
+            }
+          "
+          @mouseout="
+            () => {
+              centerBlock = null
+            }
+          "
+          @mouseup="
+            () => {
+              centerBlock = null
+            }
+          "
           @contextmenu.prevent="onRightClick(block)"
           @dblclick="dbClick(gameState.board, block)"
           :gameStaus="gameStatus"
+          :isInArounds="arounds.includes(block)"
         />
       </div>
     </div>

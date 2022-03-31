@@ -135,16 +135,6 @@ function revealeBlocks(board: BlockState[][], centerBlcok: BlockState) {
   }
 }
 
-export function showAllMines(board: BlockState[][]) {
-  board.forEach((row) => {
-    row.forEach((block) => {
-      if (block.isMine) {
-        block.revealed = true
-      }
-    })
-  })
-}
-
 export function onClick(gameState: GameState, block: BlockState) {
   const { board, isMineGenerated } = gameState
   if (!isMineGenerated) {
