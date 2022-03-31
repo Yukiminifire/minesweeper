@@ -8,11 +8,13 @@ import {
   checkGameState,
   fireWork,
   getArounds,
+  useNow,
 } from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 import { BlockState } from './component/type'
 import MyMine from './component/MyMine.vue'
+import MyTimer from './component/MyTimer.vue'
 
 export default defineComponent({
   setup() {
@@ -22,12 +24,6 @@ export default defineComponent({
       return gameState.value.isMineGenerated
         ? checkGameState(gameState.value)
         : 'notReady'
-    })
-
-    watch(gameStatus, async (newValue, oldValue) => {
-      if (gameStatus.value === 'won') {
-        fireWork()
-      }
     })
 
     const centerBlock = ref<null | BlockState>(null)
@@ -51,6 +47,29 @@ export default defineComponent({
       return gameState.value.mineCount - flags
     })
 
+    const now = useNow()
+    watch(gameStatus, async (newValue, oldValue) => {
+      if (gameStatus.value === 'play') {
+        now.run()
+      } else {
+        now.stop()
+      }
+      if (gameStatus.value === 'won') {
+        fireWork()
+      }
+    })
+
+    const deltaTime = computed(() => {
+      now.now.value
+      if (Number.isNaN(gameState.value.time.end)) {
+        return Math.round((Date.now() - gameState.value.time.start || 0) / 1000)
+      } else {
+        return Math.round(
+          (gameState.value.time.start - gameState.value.time.end) / 1000,
+        )
+      }
+    })
+
     return {
       gameState,
       onClick,
@@ -60,9 +79,10 @@ export default defineComponent({
       arounds,
       centerBlock,
       mineRet,
+      deltaTime,
     }
   },
-  components: { MyFooter, MMineBlock, MyMine },
+  components: { MyFooter, MMineBlock, MyMine, MyTimer },
 })
 </script>
 
@@ -71,11 +91,17 @@ export default defineComponent({
     class="flex flex-col dark:bg-gray-900 dark:text-white min-h-screen items-center py-4"
   >
     <h1>Minesweeper</h1>
-    <div class="flex justify-center items-center gap-1">
-      <MyMine />
-      {{ mineRet }}
+    <div class="flex gap-4 justify-center items-center py-2">
+      <div class="flex justify-center items-center gap-1">
+        <MyTimer />
+        {{ deltaTime }}
+      </div>
+      <div class="flex justify-center items-center gap-1">
+        <MyMine />
+        {{ mineRet }}
+      </div>
     </div>
-    <div class="flex flex-col py-3">
+    <div class="flex flex-col py-2">
       <div
         v-for="(row, y) in gameState.board"
         :key="y"
