@@ -6,7 +6,7 @@ import Mysun from './Mysun.vue'
 </script>
 
 <template>
-  <nav class="text-xl mt-6 inline-flex gap-2">
+  <nav class="text-xl mt-4 inline-flex gap-2">
     <button
       class="icon-btn !outline-none dark:text-white"
       @click="toggleDark()"

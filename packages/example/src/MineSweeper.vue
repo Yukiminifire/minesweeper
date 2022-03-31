@@ -70,6 +70,25 @@ export default defineComponent({
       }
     })
 
+    const barClass = computed(() => {
+      switch (gameStatus.value) {
+        case 'notReady':
+          return 'text-gray-500'
+          break
+        case 'lost':
+          return 'text-red-500'
+          break
+        case 'play':
+          return ''
+          break
+        case 'won':
+          return 'text-green-500'
+          break
+        default:
+          break
+      }
+    })
+
     return {
       gameState,
       onClick,
@@ -80,6 +99,7 @@ export default defineComponent({
       centerBlock,
       mineRet,
       deltaTime,
+      barClass,
     }
   },
   components: { MyFooter, MMineBlock, MyMine, MyTimer },
@@ -92,11 +112,11 @@ export default defineComponent({
   >
     <h1>Minesweeper</h1>
     <div class="flex gap-4 justify-center items-center py-2">
-      <div class="flex justify-center items-center gap-1">
+      <div :class="`flex justify-center items-center gap-1 ${barClass}`">
         <MyTimer />
         {{ deltaTime }}
       </div>
-      <div class="flex justify-center items-center gap-1">
+      <div :class="`flex justify-center items-center gap-1 ${barClass}`">
         <MyMine />
         {{ mineRet }}
       </div>
@@ -134,7 +154,9 @@ export default defineComponent({
         />
       </div>
     </div>
-    {{ gameStatus }}
+    <div :class="`flex justify-center items-center py-2 ${barClass}`">
+      {{ gameStatus }}
+    </div>
     <MyFooter />
   </div>
 </template>
