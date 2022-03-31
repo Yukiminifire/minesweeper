@@ -1,4 +1,5 @@
 import confetti from 'canvas-confetti'
+import { ref } from 'vue'
 import { BlockState } from './component/type'
 
 export function generateBoard(width: number, height: number) {
@@ -279,4 +280,36 @@ export function fireWork() {
     spread: 120,
     startVelocity: 45,
   })
+}
+
+export function useNow() {
+  const now = ref(0)
+
+  type Status = 'running' | 'pause'
+  const status = ref<Status>('pause')
+
+  function updateNow() {
+    if (status.value === 'running') {
+      now.value = Date.now()
+
+      setTimeout(() => {
+        updateNow()
+      }, 1000)
+    }
+  }
+  function run() {
+    if (status.value !== 'running') {
+      status.value = 'running'
+      updateNow()
+    }
+  }
+  function stop() {
+    now.value = Date.now()
+    status.value = 'pause'
+  }
+  return {
+    now,
+    run,
+    stop,
+  }
 }
