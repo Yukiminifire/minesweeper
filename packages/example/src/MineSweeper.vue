@@ -19,6 +19,7 @@ import MMineBlock from './component/MMineBlock.vue'
 import { BlockState } from './component/type'
 import MyMine from './component/MyMine.vue'
 import MyTimer from './component/MyTimer.vue'
+import { useLocalStorage } from '@vueuse/core'
 
 export default defineComponent({
   setup() {
@@ -52,6 +53,7 @@ export default defineComponent({
     })
 
     const name = ref('yby')
+    useLocalStorage('player-name', name)
     const rankList: Ref<RankInfo[]> = ref([])
 
     watch(cloudbase.status, async () => {
@@ -129,7 +131,7 @@ export default defineComponent({
     <h1>Minesweeper</h1>
     <div class="flex gap-6 justify-center items-center py-3">
       <button
-        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center"
+        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center text-white"
         @click="
           () => {
             gameState = generateGameState(9, 9, 10)
@@ -139,7 +141,7 @@ export default defineComponent({
         Easy
       </button>
       <button
-        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center"
+        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center text-white"
         @click="
           () => {
             gameState = generateGameState(16, 16, 40)
