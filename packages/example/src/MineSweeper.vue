@@ -17,8 +17,8 @@ import {
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 import { BlockState } from './component/type'
-import MyMine from './component/MyMine.vue'
-import MyTimer from './component/MyTimer.vue'
+import MyMine from './component/MineICON.vue'
+import MyTimer from './component/TimerICON.vue'
 import { useLocalStorage } from '@vueuse/core'
 import packageJSON from '../package.json'
 export default defineComponent({
@@ -162,7 +162,7 @@ export default defineComponent({
         {{ mineRet }}
       </div>
     </div>
-    <div class="flex flex-col py-2">
+    <div class="flex flex-col py-2 select-none">
       <div
         v-for="(row, y) in gameState.board"
         :key="y"
@@ -173,17 +173,17 @@ export default defineComponent({
           :key="x"
           :block="block"
           @click="onClick(gameState, block)"
-          @mousedown="
+          @pointerdown="
             () => {
               centerBlock = block
             }
           "
-          @mouseout="
+          @pointerout="
             () => {
               centerBlock = null
             }
           "
-          @mouseup="
+          @pointerup="
             () => {
               centerBlock = null
             }

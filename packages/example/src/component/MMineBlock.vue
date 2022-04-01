@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { BlockState } from './type'
 import { GameStatus } from '../logic'
-import MyFlag from './MyFlag.vue'
-import MyMine from './MyMine.vue'
+import MyFlag from './FlagICON.vue'
+import MyMine from './MineICON.vue'
 import { isDev } from './storage/index'
 defineProps<{
   block: BlockState
