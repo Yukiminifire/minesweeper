@@ -18,7 +18,7 @@ import MyTimer from './component/MyTimer.vue'
 
 export default defineComponent({
   setup() {
-    const gameState = ref(generateGameState(10, 10, 10))
+    const gameState = ref(generateGameState(9, 9, 10))
 
     const gameStatus = computed(() => {
       return gameState.value.isMineGenerated
@@ -100,6 +100,7 @@ export default defineComponent({
       mineRet,
       deltaTime,
       barClass,
+      generateGameState,
     }
   },
   components: { MyFooter, MMineBlock, MyMine, MyTimer },
@@ -108,9 +109,31 @@ export default defineComponent({
 
 <template>
   <div
-    class="flex flex-col dark:bg-gray-900 dark:text-white min-h-screen items-center py-4"
+    class="flex flex-col dark:bg-gray-900 dark:text-white min-h-screen items-center py-6"
   >
     <h1>Minesweeper</h1>
+    <div class="flex gap-6 justify-center items-center py-3">
+      <button
+        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center"
+        @click="
+          () => {
+            gameState = generateGameState(9, 9, 10)
+          }
+        "
+      >
+        Easy
+      </button>
+      <button
+        class="border border-emerald-500 bg-emerald-500 py-1 px-2 rounded items-center justify-center"
+        @click="
+          () => {
+            gameState = generateGameState(16, 16, 40)
+          }
+        "
+      >
+        Hard
+      </button>
+    </div>
     <div class="flex gap-4 justify-center items-center py-2">
       <div :class="`flex justify-center items-center gap-1 ${barClass}`">
         <MyTimer />
