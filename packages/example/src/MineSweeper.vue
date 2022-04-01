@@ -17,8 +17,8 @@ import {
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
 import { BlockState } from './component/type'
-import MyMine from './component/MyMine.vue'
-import MyTimer from './component/MyTimer.vue'
+import MyMine from './component/MineICON.vue'
+import MyTimer from './component/TimerICON.vue'
 import { useLocalStorage } from '@vueuse/core'
 import packageJSON from '../package.json'
 export default defineComponent({

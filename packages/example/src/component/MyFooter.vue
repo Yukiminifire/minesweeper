@@ -1,8 +1,8 @@
 <script setup lang="ts">
 import { isDark, toggleDark } from './index'
-import Mygithub from './Mygithub.vue'
-import Mymoon from './Mymoon.vue'
-import Mysun from './Mysun.vue'
+import Mygithub from './GithubICON.vue'
+import Mymoon from './MoonICON.vue'
+import Mysun from './SunICON.vue'
 </script>
 
 <template>
