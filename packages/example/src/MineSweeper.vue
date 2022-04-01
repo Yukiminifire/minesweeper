@@ -20,7 +20,7 @@ import { BlockState } from './component/type'
 import MyMine from './component/MyMine.vue'
 import MyTimer from './component/MyTimer.vue'
 import { useLocalStorage } from '@vueuse/core'
-
+import packageJSON from '../package.json'
 export default defineComponent({
   setup() {
     const gameState = ref(generateGameState(9, 9, 10))
@@ -118,6 +118,7 @@ export default defineComponent({
       generateGameState,
       rankList,
       name,
+      package: packageJSON,
     }
   },
   components: { MyFooter, MMineBlock, MyMine, MyTimer },
@@ -198,6 +199,11 @@ export default defineComponent({
       {{ gameStatus }}
     </div>
     <MyFooter />
+    <div
+      class="flex py-2 justify-center items-center text-gray-300 dark:text-gray-700"
+    >
+      version:{{ package.version }}
+    </div>
     <div class="flex py-6 justify-center items-center dark:text-black">
       <input
         v-model="name"

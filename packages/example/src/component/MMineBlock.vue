@@ -36,8 +36,9 @@ function getblockClass(block: BlockState) {
       w-8
       h-8 
       m-0.2 
-      border 
-      border-gray-500 
+      border
+      border-gray-500/70
+      rounded-sm
       justify-center 
       items-center
       ${getblockClass(block)}
