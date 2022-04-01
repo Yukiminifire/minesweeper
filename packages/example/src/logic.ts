@@ -1,6 +1,7 @@
 import confetti from 'canvas-confetti'
 import { ref } from 'vue'
 import { BlockState } from './component/type'
+import { useCloudbase } from './database'
 
 export function generateBoard(width: number, height: number) {
   const board: BlockState[][] = []
@@ -311,5 +312,44 @@ export function useNow() {
     now,
     run,
     stop,
+  }
+}
+
+export const cloudbase = useCloudbase()
+
+export async function saveCloud(
+  name: string,
+  time: number,
+  status: GameStatus,
+) {
+  if (cloudbase.status.value === 'ready') {
+    const db = cloudbase.app.database()
+    const saveResult = await db.collection('rank4').add({
+      name,
+      time: time,
+      status,
+    })
+    console.log('save res', saveResult)
+  }
+}
+
+export interface RankInfo {
+  id: number
+  name: string
+  time: number
+  status: GameStatus
+}
+
+export async function getRankList() {
+  if (cloudbase.status.value === 'ready') {
+    const db = cloudbase.app.database()
+    const rankResult = await db
+      .collection('rank4')
+      .orderBy('time', 'asc')
+      .limit(10)
+      .get()
+    return rankResult.data as RankInfo[]
+  } else {
+    return []
   }
 }
