@@ -1,5 +1,5 @@
 <script lang="ts">
-import { computed, defineComponent, ref, watch } from 'vue'
+import { computed, defineComponent, Ref, ref, watch } from 'vue'
 import {
   generateGameState,
   onClick,
@@ -9,6 +9,10 @@ import {
   fireWork,
   getArounds,
   useNow,
+  RankInfo,
+  cloudbase,
+  getRankList,
+  saveCloud,
 } from './logic'
 import MyFooter from './component/MyFooter.vue'
 import MMineBlock from './component/MMineBlock.vue'
@@ -47,6 +51,13 @@ export default defineComponent({
       return gameState.value.mineCount - flags
     })
 
+    const name = ref('yby')
+    const rankList: Ref<RankInfo[]> = ref([])
+
+    watch(cloudbase.status, async () => {
+      rankList.value = await getRankList()
+    })
+
     const now = useNow()
     watch(gameStatus, async (newValue, oldValue) => {
       if (gameStatus.value === 'play') {
@@ -56,6 +67,8 @@ export default defineComponent({
       }
       if (gameStatus.value === 'won') {
         fireWork()
+        await saveCloud(name.value, deltaTime.value, 'won')
+        rankList.value = await getRankList()
       }
     })
 
@@ -101,6 +114,8 @@ export default defineComponent({
       deltaTime,
       barClass,
       generateGameState,
+      rankList,
+      name,
     }
   },
   components: { MyFooter, MMineBlock, MyMine, MyTimer },
@@ -181,5 +196,19 @@ export default defineComponent({
       {{ gameStatus }}
     </div>
     <MyFooter />
+    <div class="flex py-6 justify-center items-center dark:text-black">
+      <input
+        v-model="name"
+        placeholder="please enter a nickname"
+        class="px-1 py-1 text-gray-10 border rounded"
+      />
+    </div>
+    <div
+      v-for="(rank, index) in rankList"
+      :key="rank.id"
+      class="flex py-2 justify-center items-center"
+    >
+      {{ index + 1 }}、{{ rank.name }} : {{ rank.time }}--{{ rank.status }}
+    </div>
   </div>
 </template>
