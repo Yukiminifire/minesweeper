@@ -172,7 +172,13 @@ export default defineComponent({
           v-for="(block, x) in row"
           :key="x"
           :block="block"
-          @click="onClick(gameState, block)"
+          @click="
+            () => {
+              if (gameStatus === 'play' || 'notReady') {
+                onClick(gameState, block)
+              }
+            }
+          "
           @pointerdown="
             () => {
               centerBlock = block
@@ -188,8 +194,20 @@ export default defineComponent({
               centerBlock = null
             }
           "
-          @contextmenu.prevent="onRightClick(block)"
-          @dblclick="dbClick(gameState.board, block)"
+          @contextmenu.prevent="
+            () => {
+              if (gameStatus === 'play') {
+                onRightClick(block)
+              }
+            }
+          "
+          @dblclick="
+            () => {
+              if (gameStatus === 'play') {
+                dbClick(gameState.board, block)
+              }
+            }
+          "
           :gameStaus="gameStatus"
           :isInArounds="arounds.includes(block)"
         />

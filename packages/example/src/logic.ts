@@ -148,7 +148,7 @@ export function onClick(gameState: GameState, block: BlockState) {
 }
 
 export function onRightClick(block: BlockState) {
-  if (!block.flagged) {
+  if (!block.flagged && !block.revealed) {
     block.flagged = true
   } else {
     block.flagged = false
