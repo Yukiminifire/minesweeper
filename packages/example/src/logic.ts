@@ -2,6 +2,7 @@ import confetti from 'canvas-confetti'
 import { ref } from 'vue'
 import { BlockState } from './component/type'
 import { useCloudbase } from './database'
+import axios from 'axios'
 
 export function generateBoard(width: number, height: number) {
   const board: BlockState[][] = []
@@ -341,15 +342,13 @@ export interface RankInfo {
 }
 
 export async function getRankList() {
-  if (cloudbase.status.value === 'ready') {
-    const db = cloudbase.app.database()
-    const rankResult = await db
-      .collection('rank4')
-      .orderBy('time', 'asc')
-      .limit(10)
-      .get()
-    return rankResult.data as RankInfo[]
-  } else {
+  try {
+    const data = await axios.get(
+      'https://minesweeper-cloudbase-7a2ff16b6d-1310260690.ap-shanghai.app.tcloudbase.com/getRank',
+    )
+    return data.data
+  } catch (error) {
+    console.error(error)
     return []
   }
 }

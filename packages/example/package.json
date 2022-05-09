@@ -25,6 +25,7 @@
     "@template/template": "workspace:*",
     "@types/canvas-confetti": "^1.4.2",
     "@vueuse/core": "^8.2.0",
+    "axios": "^0.27.2",
     "canvas-confetti": "^1.5.1",
     "core": "link:@type/vueuse/core",
     "vue": "^3.2.29"
