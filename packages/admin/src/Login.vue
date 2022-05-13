@@ -26,7 +26,9 @@ export default defineComponent({
       <el-input v-model="ruleForm.pass" type="password" />
     </el-form-item>
     <el-form-item>
-      <el-button type="primary" @click="">登陆</el-button>
+      <router-link to="/"
+        ><el-button type="primary">登陆</el-button></router-link
+      >
       <el-button>重置</el-button>
     </el-form-item>
   </el-form>
