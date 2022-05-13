@@ -1,34 +1,43 @@
 <script lang="ts">
 import { defineComponent, reactive } from 'vue'
-const form = reactive({
-  name: '',
-})
-const ruleForm = reactive({
-  pass: '',
-})
+import { useRouter } from 'vue-router'
+import { useInfo } from './userInfo'
 
 export default defineComponent({
   setup() {
+    const form = reactive({
+      name: '',
+      pass: '',
+    })
+
+    const router = useRouter()
+
+    async function login() {
+      useInfo.value.name = form.name
+      useInfo.value.token = 'yby_token'
+      router.replace({
+        path: '/',
+      })
+    }
+
     return {
       form,
-      ruleForm,
+      login,
     }
   },
 })
 </script>
 
 <template>
-  <el-form :model="ruleForm" status-icon label-width="120px" class="m-5">
+  <el-form :model="form" status-icon label-width="120px" class="m-5">
     <el-form-item label="姓名">
       <el-input v-model="form.name" />
     </el-form-item>
     <el-form-item label="密码" prop="pass">
-      <el-input v-model="ruleForm.pass" type="password" />
+      <el-input v-model="form.pass" type="password" />
     </el-form-item>
     <el-form-item>
-      <router-link to="/"
-        ><el-button type="primary">登陆</el-button></router-link
-      >
+      <el-button type="primary" @click="login()">登陆</el-button>
       <el-button>重置</el-button>
     </el-form-item>
   </el-form>
