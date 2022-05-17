@@ -8,17 +8,16 @@ export const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('./Home.vue'),
-      children: [
-        {
-          path: 'ranklist',
-          component: () => import('./RankList.vue'),
-        },
-      ],
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('./Login.vue'),
+    },
+
+    {
+      path: '/ranklist',
+      component: () => import('./RankList.vue'),
     },
   ],
 })
@@ -32,29 +31,31 @@ function calcuWay() {
 }
 
 router.beforeEach(async (to, from, next) => {
-  const way = calcuWay()
-  switch (way) {
-    case 'login':
-      if (to.name === 'login') {
-        next()
-      } else {
-        next({
-          path: '/login',
-        })
-      }
-      break
-    case 'home':
-      if (to.name === 'home') {
-        next()
-      } else {
-        next({
-          path: '/home',
-        })
-      }
-      break
+  // const way = calcuWay()
+  // switch (way) {
+  //   case 'login':
+  //     if (to.name === 'login') {
+  //       next()
+  //     } else {
+  //       next({
+  //         path: '/login',
+  //       })
+  //     }
+  //     break
+  //   case 'home':
+  //     if (to.name === 'home') {
+  //       next()
+  //     } else {
+  //       next({
+  //         path: '/home',
+  //       })
+  //     }
+  //     break
 
-    default:
-      console.error('error')
-      break
-  }
+  //   default:
+  //     console.error('error')
+  //     break
+  // }
+
+  next()
 })

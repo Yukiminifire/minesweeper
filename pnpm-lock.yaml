@@ -20,6 +20,7 @@ importers:
   packages/admin:
     specifiers:
       '@cloudbase/js-sdk': ^1.7.2
+      '@element-plus/icons-vue': ^1.1.4
       '@template/template': workspace:*
       '@types/canvas-confetti': ^1.4.2
       '@vitejs/plugin-vue': ^2.1.0
@@ -29,6 +30,7 @@ importers:
       axios: ^0.27.2
       canvas-confetti: ^1.5.1
       core: link:@types/vueuse/core
+      dayjs: ^1.11.2
       element-plus: ^2.2.0
       postcss: ^8.4.6
       postcss-nested: ^5.0.6
@@ -39,12 +41,14 @@ importers:
       windicss: ^3.4.3
     dependencies:
       '@cloudbase/js-sdk': registry.npmmirror.com/@cloudbase/js-sdk/1.7.2
+      '@element-plus/icons-vue': registry.npmmirror.com/@element-plus/icons-vue/1.1.4_vue@3.2.31
       '@template/template': link:../template/template
       '@types/canvas-confetti': registry.npmmirror.com/@types/canvas-confetti/1.4.2
       '@vueuse/core': registry.npmmirror.com/@vueuse/core/8.2.0_vue@3.2.31
       axios: registry.npmmirror.com/axios/0.27.2
       canvas-confetti: registry.npmmirror.com/canvas-confetti/1.5.1
-      core: link:@type/vueuse/core
+      core: link:@types/vueuse/core
+      dayjs: registry.npmmirror.com/dayjs/1.11.2
       element-plus: registry.npmmirror.com/element-plus/2.2.0_vue@3.2.31
       vue: registry.npmmirror.com/vue/3.2.31
       vue-router: registry.npmmirror.com/vue-router/4.0.15_vue@3.2.31
