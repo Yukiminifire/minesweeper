@@ -1,3 +1,4 @@
+getRankListAndDealNetorkError
 <script lang="ts">
 import { computed, defineComponent, Ref, ref, watch } from 'vue'
 import {
@@ -9,9 +10,8 @@ import {
   fireWork,
   getArounds,
   useNow,
-  RankInfo,
   cloudbase,
-  getRankList,
+  getRankListAndDealNetorkError,
   saveCloud,
 } from './logic'
 import MyFooter from './component/MyFooter.vue'
@@ -21,6 +21,7 @@ import MyMine from './component/MineICON.vue'
 import MyTimer from './component/TimerICON.vue'
 import { useLocalStorage } from '@vueuse/core'
 import packageJSON from '../package.json'
+import { RankInfo } from '@minsweeper/api'
 export default defineComponent({
   setup() {
     const gameState = ref(generateGameState(9, 9, 10))
@@ -57,7 +58,7 @@ export default defineComponent({
     const rankList: Ref<RankInfo[]> = ref([])
 
     watch(cloudbase.status, async () => {
-      rankList.value = await getRankList()
+      rankList.value = await getRankListAndDealNetorkError()
     })
 
     const now = useNow()
@@ -70,7 +71,7 @@ export default defineComponent({
       if (gameStatus.value === 'won') {
         fireWork()
         await saveCloud(name.value, deltaTime.value, 'won')
-        rankList.value = await getRankList()
+        rankList.value = await getRankListAndDealNetorkError()
       }
     })
 
@@ -234,7 +235,7 @@ export default defineComponent({
       :key="rank.id"
       class="flex py-2 justify-center items-center"
     >
-      {{ index + 1 }}、{{ rank.name }} : {{ rank.time }}--{{ rank.status }}
+      {{ index + 1 }}、{{ rank.name }} : {{ rank.time }}-- won
     </div>
   </div>
 </template>

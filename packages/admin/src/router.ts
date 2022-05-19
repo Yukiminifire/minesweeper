@@ -1,4 +1,8 @@
-import { createRouter, createWebHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHistory,
+  RouteLocationNormalized,
+} from 'vue-router'
 import { useInfo } from './userInfo'
 
 export const router = createRouter({
@@ -22,40 +26,42 @@ export const router = createRouter({
   ],
 })
 
-function calcuWay() {
-  if (useInfo.value.name) {
-    return 'home'
-  } else {
+function calcuWay(to: RouteLocationNormalized) {
+  if (!useInfo.value.name) {
     return 'login'
+  } else {
+    return to
   }
 }
 
 router.beforeEach(async (to, from, next) => {
-  // const way = calcuWay()
-  // switch (way) {
-  //   case 'login':
-  //     if (to.name === 'login') {
-  //       next()
-  //     } else {
-  //       next({
-  //         path: '/login',
-  //       })
-  //     }
-  //     break
-  //   case 'home':
-  //     if (to.name === 'home') {
-  //       next()
-  //     } else {
-  //       next({
-  //         path: '/home',
-  //       })
-  //     }
-  //     break
+  const way = calcuWay(to)
+  if (way === to) {
+    next()
+    return
+  }
+  switch (way) {
+    case 'login':
+      if (to.name === 'login') {
+        next()
+      } else {
+        next({
+          path: '/login',
+        })
+      }
+      break
+    case 'home':
+      if (to.name === 'home') {
+        next()
+      } else {
+        next({
+          path: '/',
+        })
+      }
+      break
 
-  //   default:
-  //     console.error('error')
-  //     break
-  // }
-
-  next()
+    default:
+      console.error('error')
+      break
+  }
 })

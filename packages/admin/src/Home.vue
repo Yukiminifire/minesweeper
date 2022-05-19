@@ -13,7 +13,7 @@ export default defineComponent({
     }
 
     const handleSelect = (...args: any[]) => {
-      console.log('select', ...args)
+      // console.log('select', ...args)
     }
 
     return {

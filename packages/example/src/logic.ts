@@ -2,8 +2,7 @@ import confetti from 'canvas-confetti'
 import { ref } from 'vue'
 import { BlockState } from './component/type'
 import { useCloudbase } from './database'
-import axios from 'axios'
-
+import { getRankList } from '@minsweeper/api'
 export function generateBoard(width: number, height: number) {
   const board: BlockState[][] = []
   for (let y = 0; y < height; y++) {
@@ -334,19 +333,9 @@ export async function saveCloud(
   }
 }
 
-export interface RankInfo {
-  id: number
-  name: string
-  time: number
-  status: GameStatus
-}
-
-export async function getRankList() {
+export async function getRankListAndDealNetorkError() {
   try {
-    const data = await axios.get(
-      'https://minesweeper-cloudbase-7a2ff16b6d-1310260690.ap-shanghai.app.tcloudbase.com/getRank',
-    )
-    return data.data
+    return getRankList()
   } catch (error) {
     console.error(error)
     return []
