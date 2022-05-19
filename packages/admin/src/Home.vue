@@ -24,27 +24,22 @@ export default defineComponent({
 </script>
 
 <template>
-  <el-row class="tac">
-    <el-col :span="3">
-      <el-menu
-        active-text-color="#ffd04b"
-        background-color="#545c64"
-        class="el-menu-vertical-demo"
-        default-active="2"
-        text-color="#fff"
-        @open="handleOpen"
-        @close="handleClose"
-        @select="handleSelect"
-        :router="true"
+  <div class="h-screen flex">
+    <el-menu
+      @open="handleOpen"
+      @close="handleClose"
+      @select="handleSelect"
+      :router="true"
+      class="h-full w-40"
+    >
+      <el-menu-item index="1" :route="{ path: '/' }"
+        ><el-icon><HomeFilled /></el-icon>首页</el-menu-item
       >
-        <el-menu-item index="1" :route="{ path: '/' }"
-          ><el-icon><HomeFilled /></el-icon>首页</el-menu-item
-        >
-        <el-menu-item index="2" :route="{ path: '/ranklist' }"
-          ><el-icon><List /></el-icon>排名</el-menu-item
-        >
-      </el-menu>
-    </el-col>
-  </el-row>
-  <router-view></router-view>
+      <el-menu-item index="2" :route="{ path: '/ranklist' }"
+        ><el-icon><List /></el-icon>排名</el-menu-item
+      >
+    </el-menu>
+
+    <router-view></router-view>
+  </div>
 </template>
