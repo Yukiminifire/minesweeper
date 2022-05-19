@@ -1,6 +1,5 @@
 <script lang="ts">
 import { defineComponent } from 'vue'
-
 import { useInfo } from './userInfo'
 
 export default defineComponent({
@@ -11,11 +10,9 @@ export default defineComponent({
     const handleClose = (key: string, keyPath: string[]) => {
       // console.log(key, keyPath)
     }
-
     const handleSelect = (...args: any[]) => {
       // console.log('select', ...args)
     }
-
     return {
       useInfo,
       handleOpen,
@@ -49,4 +46,5 @@ export default defineComponent({
       </el-menu>
     </el-col>
   </el-row>
+  <router-view></router-view>
 </template>

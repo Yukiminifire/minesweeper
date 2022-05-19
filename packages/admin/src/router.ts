@@ -12,16 +12,17 @@ export const router = createRouter({
       path: '/',
       name: 'home',
       component: () => import('./Home.vue'),
+      children: [
+        {
+          path: '/ranklist',
+          component: () => import('./RankList.vue'),
+        },
+      ],
     },
     {
       path: '/login',
       name: 'login',
       component: () => import('./Login.vue'),
-    },
-
-    {
-      path: '/ranklist',
-      component: () => import('./RankList.vue'),
     },
   ],
 })
